@@ -35,3 +35,8 @@ def create_bot_application():
 
     print("Bot is running...")
     return application
+
+async def process_update(application: Application, update_data: dict):
+    """Process incoming webhook update"""
+    update = Update.de_json(update_data, application.bot)
+    await application.process_update(update)
