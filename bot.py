@@ -8,7 +8,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def movie(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not context.args:
-        await update.message.reply_text("Please provide a movie name after the /movie command.")
+        await update.message.reply_text("Please provide a movie name after the /movie command. Movie title (you can include year e.g. 'The Thing 1982')")
         return
     
     query = " ".join(context.args)
@@ -27,14 +27,11 @@ async def movie(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(msg)
 
-def main():
-    app = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
+def create_bot_application():
+    application = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
 
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(CommandHandler("movie", movie))
+    application.add_handler(CommandHandler("start", start))
+    application.add_handler(CommandHandler("movie", movie))
 
     print("Bot is running...")
-    app.run_polling()
-
-if __name__ == "__main__":
-    main()
+    return application
