@@ -13,7 +13,12 @@ async def lifespan(app: FastAPI):
     await bot_app.initialize()
     # await bot_app.start()
     webhook_url = f"{os.getenv('RENDER_EXTERNAL_URL', 'https://redbot-xgi5.onrender.com')}/webhook"
-    await bot_app.bot.set_webhook(url=webhook_url)
+    webhook_info = await bot_app.bot.get_webhook_info()
+    if webhook_info.url != webhook_url:
+        await bot_app.bot.set_webhook(url=webhook_url)
+        print(f"Webhook set to {webhook_url}")
+    else:
+        print(f"Webhook already set to {webhook_url}")
 
     # asyncio.create_task(bot_app.updater.start_polling())
     # print("Bot is running...")
