@@ -11,9 +11,19 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def download_torrent_file(session: aiohttp.ClientSession, url:str, filename:str):
+    
     try:
-        async with session.get(url, timeout=aiohttp.ClientTimeout(total=30)) as response:
-            if response.start == 200:
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Accept-Encoding': 'gzip, deflate',
+            'Referer': 'https://yts.mx/',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1'
+        }
+        async with session.get(url, headers=headers, timeout=aiohttp.ClientTimeout(total=30)) as response:
+            if response.status == 200:
                 temp_dir = tempfile.gettempdir()
                 file_path = os.path.join(temp_dir, filename)
 
