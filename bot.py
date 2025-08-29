@@ -64,7 +64,7 @@ async def movie(update: Update, context: ContextTypes.DEFAULT_TYPE):
     async with aiohttp.ClientSession() as session:
         downloaded_files = []
         
-        for i, torrent in enumerate(torrents[:3]):  # Limit to first 3 torrents to avoid spam
+        for i, torrent in enumerate(torrents[:3]):
             try:
                 # Generate filename
                 safe_title = "".join(c for c in title if c.isalnum() or c in (' ', '-', '_')).rstrip()
