@@ -50,9 +50,16 @@ def get_torrent(movie_id):
     movie = data.get("data", {}).get("movie", {})
     title = movie.get("title", "")
     year = movie.get("year", None)
-    torrents = movie.get("torrents", [])
+    torrents_raw = movie.get("torrents", [])
+    
+    torrents = []
+    for torrent in torrents_raw:
+        torrent_info = {
+            'quality': torrent.get('quality', 'Unknown'),
+            'size': torrent.get('size', 'Unknown'),
+            'url': torrent.get('url', '')  # This is the direct .torrent download URL
+        }
+        torrents.append(torrent_info)
 
     return title, year, torrents
-
-    
 
