@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request
 import asyncio
-from bot import create_bot_application, process_update
+from bot import create_bot_application, process_update, keep_alive
 from contextlib import asynccontextmanager
 import os
 
@@ -22,6 +22,8 @@ async def lifespan(app: FastAPI):
 
     # asyncio.create_task(bot_app.updater.start_polling())
     # print("Bot is running...")
+
+    keep_alive()  #to ping render every 10 minutes
 
     yield
 

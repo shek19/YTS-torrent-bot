@@ -2,9 +2,12 @@ from telegram import Update, InputFile
 from telegram.ext import Application, ContextTypes, CommandHandler
 import aiohttp
 import tempfile
+import requests
+import time
+import threading
 import os
 from utils.yts_api import search_movies, get_torrent
-from config import TELEGRAM_BOT_TOKEN
+from config import TELEGRAM_BOT_TOKEN, RENDER_EXTERNAL_URL
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Hello! Send /movie <movie name> to search for a movie.")
@@ -137,3 +140,19 @@ async def process_update(application: Application, update_data: dict):
     """Process incoming webhook update"""
     update = Update.de_json(update_data, application.bot)
     await application.process_update(update)
+
+def keep_alive():
+    """Keep the bot running."""
+    if not RENDER_EXTERNAL_URL:
+        return
+    
+    def ping():
+        while True:
+            try:
+                requests.get(RENDER_EXTERNAL_URL)
+                print(f"Pinged {RENDER_EXTERNAL_URL} to keep alive.")
+            except Exception as e:
+                print(f"Error pinging {RENDER_EXTERNAL_URL}: {str(e)}")
+            time.sleep(600)
+
+    threading.Thread(target=ping, daemon=True).start()
